@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonNotificacion = findViewById(R.id.buttonNotificacion);
         buttonNotificacion2 = findViewById(R.id.buttonNotificacion2);
-        buttonNotificacion3 = f
+        buttonNotificacion3 = findViewById(R.id.button3);
 
         buttonNotificacion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +49,66 @@ public class MainActivity extends AppCompatActivity {
                 lanzarNotificacionTextoLargo();
             }
         });
+
+        buttonNotificacion3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lanzarNotificacionMuchoTexto();
+            }
+        });
+
+    }
+
+    private void lanzarNotificacionMuchoTexto() {
+
+        String idChannel = "Notificaciones largas";
+        String nombreCanal = "Notificaciones largas";
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ID_CANAL)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Notificación con texto en varias líneas")
+                .setAutoCancel(true)
+                .setContentText("Texto inicial");
+
+
+        NotificationCompat.BigTextStyle  bigTextStyle= new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle("Cabecera de mi súpertexto");
+        bigTextStyle.bigText(" ¿Quién escribió la Biblia?\n" +
+                "La Biblia fue escrita bajo la inspiración del Espíritu Santo por más de 40 autores diferentes de todos los quehaceres de la vida: pastores, granjeros, fabricantes de tiendas de acampar, médicos, pescadores, sacerdotes, filósofos y reyes. A pesar de estas diferencias en ocupaciones y la asombrosa cantidad de años que fueron necesarios para completarla, la Biblia es sumamente cohesiva y unificada en propósito y fondo.\n" +
+                "\n" +
+                "¿Qué autor contribuyó con más libros al Antiguo Testamento?\n" +
+                "Moisés. Él escribió los primeros cinco libros de la Biblia, llamados el Pentateuco; los que forman los cimientos de la Biblia.\n" +
+                "\n" +
+                "¿Qué autor contribuyó con más libros para el Nuevo Testamento?\n" +
+                "El Apóstol Pablo, quien escribió 14 libros (más de la mitad) del Nuevo Testamento.\n" +
+                "\n" +
+                "¿Cuándo se escribió la Biblia?\n" +
+                "Se escribió en un período de unos 1,500 años, de alrededor de 1450 a. C. (el tiempo de Moises) a aproximadamente 100 d. C. (a continuación de la muerte y resurrección de Jesucristo).");
+        bigTextStyle.setSummaryText("Todos contentos.");
+
+        builder.setStyle(bigTextStyle);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel =
+                    new NotificationChannel(idChannel, nombreCanal, NotificationManager.IMPORTANCE_DEFAULT);
+
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setShowBadge(true);
+            builder.setChannelId(idChannel);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+
+        }else{
+            builder.setDefaults(Notification.DEFAULT_SOUND| Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
+
+        }
+
+        notificationManager.notify(contador++, builder.build());
+
 
     }
 
